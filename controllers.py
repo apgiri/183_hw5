@@ -34,10 +34,19 @@ from .models import get_user_email
 url_signer = URLSigner(session)
 
 @action('index')
-@action.uses(db, auth, 'index.html')
+@action.uses(db, auth, url_signer, 'index.html')
 def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         # test pycharm connection
-        my_callback_url = URL('my_callback', signer=url_signer),
+        post_username=f"{auth.current_user.get('first_name')} {auth.current_user.get('last_name')}",
+        load_posts_url = URL('load_posts', signer=url_signer),
     )
+
+
+# first API function: used to answer requests from JS in browser
+@action('load_posts')
+@action.uses(db, url_signer.verify())
+def load_posts():
+    rows = db(db.posts).select().as_list()
+    return dict(rows=rows)

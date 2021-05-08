@@ -9,13 +9,50 @@
 
 <div class="section" id="vue-target" v-cloak>
   <!-- Put here your Vue.js template -->
+  <!-- this div is displayed only if add_mode is true -->
+  <div v-if="add_mode" class="container block">
+
+    <div class="title">Add Post</div>
+    <div class="form">
+
+      <!-- This looks like a form, but is not.  We just need the inputs. -->
+      <div class="field">
+        <label class="label">Post description</label>
+        <div class="control">
+          <input type="text" v-model="add_post_desc" class="input">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+          <input type="submit" @click="add_post" value="Add" class="button is-primary">
+          <input type="submit" @click="set_add_status(false)" value="Cancel" class="button is-warning">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container block">
+
+    <h1 class = "title">Posts</h1>
+    <div v-for="r in rows">
+      <h3>{{r.post}}</h3>
+      <h2>{{post_username}}</h2>
+    </div>
+
+    <button @click="set_add_status(true)" class="button is-primary">
+      <i class=""fa fa-plus fa-fw></i>Add Post
+    </button>
+
+  </div>
+
 </div>
 
 
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->
 <script>
-  let my_callback_url = "[[=XML(my_callback_url)]]";
+  let load_posts_url = "[[=XML(load_posts_url)]];
 </script>
 <script src="js/index.js"></script>
 [[end]]

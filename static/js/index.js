@@ -10,6 +10,10 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
+        add_mode: false,
+        add_post_desc: "",
+        rows: [],
+
     };
 
     app.enumerate = (a) => {
@@ -19,10 +23,21 @@ let init = (app) => {
         return a;
     };
 
+    app.add_post = function(){
+        // TODO
+
+    };
+
+    app.set_add_status = function(new_status){
+        // TODO
+        app.vue.add_mode = new_status;
+    };
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
+        add_post: app.add_post,
+        set_add_status: app.set_add_status,
     };
 
     // This creates the Vue instance.
@@ -36,6 +51,10 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
+        axios.get(load_posts_url).then(function(response) {
+            app.vue.rows = app.enumerate(response.data.rows)
+
+        })
     };
 
     // Call to the initializer.
