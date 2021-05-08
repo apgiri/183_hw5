@@ -38,5 +38,6 @@ url_signer = URLSigner(session)
 def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
+        # test pycharm connection
         my_callback_url = URL('my_callback', signer=url_signer),
     )
