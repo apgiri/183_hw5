@@ -23,13 +23,28 @@ let init = (app) => {
         return a;
     };
 
-    app.add_post = function(){
-        // TODO
+    app.add_post = function () {
+        axios.post(add_post_url,
+            {
+                post_desc: app.vue.add_post_desc,
+            }).then(function (response) {
+            app.vue.rows.push({
+                id: response.data.id,
+                post_desc: app.vue.add_post_desc,
+            });
+        app.enumerate(app.vue.rows);
+        app.reset_form();
+        app.set_add_status(false);
+
+        });
 
     };
 
+    app.reset_form = function () {
+        app.vue.add_post_desc = "";
+    };
+
     app.set_add_status = function(new_status){
-        // TODO
         app.vue.add_mode = new_status;
     };
 
@@ -38,6 +53,7 @@ let init = (app) => {
         // Complete as you see fit.
         add_post: app.add_post,
         set_add_status: app.set_add_status,
+        reset_form: app.reset_form,
     };
 
     // This creates the Vue instance.
@@ -52,9 +68,8 @@ let init = (app) => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
         axios.get(load_posts_url).then(function(response) {
-            app.vue.rows = app.enumerate(response.data.rows)
-
-        })
+            app.vue.rows = app.enumerate(response.data.rows);
+        });
     };
 
     // Call to the initializer.

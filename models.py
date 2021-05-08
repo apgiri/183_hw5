@@ -21,8 +21,8 @@ def get_time():
 ## always commit your models to avoid problems later
 db.define_table(
     'posts',
-    Field('post', 'text'),
-    Field('user', default=get_user_email)
+    Field('post_desc', requires=IS_NOT_EMPTY()),
+    Field('user', default=get_user_email),
 )
 
 

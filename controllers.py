@@ -33,20 +33,35 @@ from .models import get_user_email
 
 url_signer = URLSigner(session)
 
+
 @action('index')
 @action.uses(db, auth, url_signer, 'index.html')
 def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         # test pycharm connection
-        post_username=f"{auth.current_user.get('first_name')} {auth.current_user.get('last_name')}",
-        load_posts_url = URL('load_posts', signer=url_signer),
+
+        poster_name=f"{auth.current_user.get('first_name')} {auth.current_user.get('last_name')}",
+        load_posts_url=URL('load_posts', signer=url_signer),
+        add_post_url=URL('add_post', signer=url_signer),
+        delete_post_url=URL('delete_post', signer=url_signer),
     )
 
 
 # first API function: used to answer requests from JS in browser
 @action('load_posts')
-@action.uses(db, url_signer.verify())
+@action.uses(db, auth, url_signer.verify())
 def load_posts():
     rows = db(db.posts).select().as_list()
     return dict(rows=rows)
+
+
+@action('add_post', method="POST")
+@action.uses(db, url_signer.verify())
+def add_post():
+    id = db.posts.insert(
+        post_desc=request.json.get('post_desc'),
+    )
+    return dict(id=id)
+
+
