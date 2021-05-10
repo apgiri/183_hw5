@@ -30,6 +30,7 @@ let init = (app) => {
             }).then(function (response) {
             app.vue.rows.push({
                 id: response.data.id,
+                name: response.data.name,
                 post_desc: app.vue.add_post_desc,
             });
         app.enumerate(app.vue.rows);

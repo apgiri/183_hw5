@@ -38,10 +38,12 @@
     <table class = "table is-striped is-fullwidth">
       <tr>
         <th>ID</th>
+        <th>Name</th>
         <th>Post description</th>
       </tr>
       <tr v-for="r in rows">
         <td>{{r.id}}</td>
+        <td>{{r.name}}</td>
         <td>{{r.post_desc}}</td>
       </tr>
     </table>

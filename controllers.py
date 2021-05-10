@@ -40,8 +40,6 @@ def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         # test pycharm connection
-
-        poster_name=f"{auth.current_user.get('first_name')} {auth.current_user.get('last_name')}",
         load_posts_url=URL('load_posts', signer=url_signer),
         add_post_url=URL('add_post', signer=url_signer),
         delete_post_url=URL('delete_post', signer=url_signer),
@@ -56,12 +54,18 @@ def load_posts():
     return dict(rows=rows)
 
 
+# second API function: used to answer add_post requests from JS in browser
 @action('add_post', method="POST")
 @action.uses(db, url_signer.verify())
 def add_post():
+
+    row = db(db.auth_user.email == get_user_email()).select().first()
+    name = row.first_name + " " + row.last_name if row is not None else "Unknown"
+
     id = db.posts.insert(
         post_desc=request.json.get('post_desc'),
+        name=name,
     )
-    return dict(id=id)
+    return dict(id=id, name=name)
 
 
